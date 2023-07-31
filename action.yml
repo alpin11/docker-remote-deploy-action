@@ -23,6 +23,9 @@ inputs:
   env:
     description: set environment variables to pass to the docker command
     required: false
+  run_number:
+    description: github run number passed to the environment
+    required: false
 runs:
   using: docker
   image: Dockerfile

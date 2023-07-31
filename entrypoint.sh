@@ -41,6 +41,7 @@ fi
 
 echo "Connecting to $INPUT_REMOTE_HOST..."
 export "$INPUT_ENV"
+export "GITHUB_RUN_NUMBER=$INPUT_RUN_NUMBER"
 docker --log-level debug --host "$INPUT_REMOTE_HOST" "$@" 2>&1
 
 if [ $INPUT_DOCKER_REGISTRY ]; then
