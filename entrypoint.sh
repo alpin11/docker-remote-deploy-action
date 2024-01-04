@@ -40,8 +40,17 @@ if [ ${INPUT_REMOTE_HOST#"ssh://"} != "$INPUT_REMOTE_HOST" ]; then
 fi
 
 echo "Connecting to $INPUT_REMOTE_HOST..."
-export "$INPUT_ENV"
+
+# Check if the environment variable is set
+if [ -z "${!INPUT_ENV}" ]; then
+    echo "Environment variable $INPUT_ENV is not set."
+else
+    echo "Environment variable $INPUT_ENV is set. Exporting..."
+    export "$INPUT_ENV"
+fi
+
 export "GITHUB_RUN_NUMBER=$INPUT_RUN_NUMBER"
+
 docker --log-level debug --host "$INPUT_REMOTE_HOST" "$@" 2>&1
 
 if [ $INPUT_DOCKER_REGISTRY ]; then
