@@ -42,14 +42,21 @@ fi
 echo "Connecting to $INPUT_REMOTE_HOST..."
 
 # Check if the environment variable is set
-if [ -z "${!INPUT_ENV}" ]; then
+if [ -z "$INPUT_ENV" ]; then
     echo "Environment variable $INPUT_ENV is not set."
 else
     echo "Environment variable $INPUT_ENV is set. Exporting..."
     export "$INPUT_ENV"
 fi
 
-export "GITHUB_RUN_NUMBER=$INPUT_RUN_NUMBER"
+# Check if INPUT_RUN_NUMBER is set and not empty
+if [ -z "$INPUT_RUN_NUMBER" ]; then
+    echo "ERROR: The environment variable INPUT_RUN_NUMBER is not set."
+    exit 1
+else
+    export GITHUB_RUN_NUMBER="$INPUT_RUN_NUMBER"
+    echo "GITHUB_RUN_NUMBER is set to $GITHUB_RUN_NUMBER"
+fi
 
 docker --log-level debug --host "$INPUT_REMOTE_HOST" "$@" 2>&1
 
