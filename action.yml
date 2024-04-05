@@ -1,5 +1,5 @@
 name: docker-swarm-deploy
-author: Jonas <jonas@jmp.blue>
+author: ALPIN11 <engineering@alpin11.com>
 description: A GitHub Action that enables you to publish your app as a Docker stack to a remote Docker swarm.
 inputs:
   remote_host:
@@ -26,6 +26,9 @@ inputs:
   run_number:
     description: github run number passed to the environment
     required: false
+  args:
+    description: build arguments for the stack deploy command
+    required: true
 runs:
   using: docker
   image: Dockerfile
