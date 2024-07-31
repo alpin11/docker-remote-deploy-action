@@ -47,14 +47,15 @@ if [ -z "$INPUT_ENV" ]; then
 else
     echo "Environment variable $INPUT_ENV is set. Exporting..."
     # Iterate over each line in the multiline string
-    while IFS= read -r line; do
+    echo "$INPUT_ENV" | while IFS= read -r line; do
         # Skip comments and empty lines
-        if [ -z "$line" ] || [ "${line:0:1}" = "#" ]; then
+        if [ -z "$line" ] || [ "${line# }" = "#" ]; then
             continue
         fi
         # Export the variable
         export "$line"
-    done <<< "$INPUT_ENV"
+    done
+    
     echo "Environment variables exported successfully."
 fi
 
