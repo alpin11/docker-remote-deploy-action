@@ -46,7 +46,16 @@ if [ -z "$INPUT_ENV" ]; then
     echo "Environment variable $INPUT_ENV is not set."
 else
     echo "Environment variable $INPUT_ENV is set. Exporting..."
-    export "$INPUT_ENV"
+    # Iterate over each line in the multiline string
+    while IFS= read -r line; do
+        # Skip comments and empty lines
+        if [ -z "$line" ] || [ "${line:0:1}" = "#" ]; then
+            continue
+        fi
+        # Export the variable
+        export "$line"
+    done <<< "$INPUT_ENV"
+    echo "Environment variables exported successfully."
 fi
 
 # Check if INPUT_RUN_NUMBER is set and not empty
