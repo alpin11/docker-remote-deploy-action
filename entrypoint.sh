@@ -43,19 +43,29 @@ echo "Connecting to $INPUT_REMOTE_HOST..."
 
 # Check if the environment variable is set
 if [ -z "$INPUT_ENV" ]; then
-    echo "Environment variable $INPUT_ENV is not set."
+    echo "Environment variable \$INPUT_ENV is not set."
 else
-    echo "Environment variable $INPUT_ENV is set. Exporting..."
-    # Iterate over each line in the multiline string
-    echo "$INPUT_ENV" | while IFS= read -r line; do
+    echo "Environment variable \$INPUT_ENV is set. Exporting..."
+    
+    # Create a temporary file
+    temp_file=$(mktemp)
+
+    # Save the content of INPUT_ENV to the temporary file
+    echo "$INPUT_ENV" > "$temp_file"
+
+    # Read the temporary file line by line
+    while IFS= read -r line; do
         # Skip comments and empty lines
         if [ -z "$line" ] || [ "${line# }" = "#" ]; then
             continue
         fi
         # Export the variable
         export "$line"
-    done
+    done < "$temp_file"
     
+    # Remove the temporary file
+    rm "$temp_file"
+
     echo "Environment variables exported successfully."
 fi
 
